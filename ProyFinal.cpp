@@ -45,7 +45,7 @@ void mostrar(tCola cola,tLista lista){
 	
 	if(t2 != NULL){
 		cout<<"\n==========================================================================\n";
-		cout<<"DESCARGADO...";
+		cout<<"DESCARGADOS";
 		cout<<"\n==========================================================================\n";
 		cout<<setw(2)<<"N"<<setw(15)<<"NOMBRE"<<setw(12)<<"PESO"<<endl;
 		while(t2 != NULL){
@@ -247,12 +247,29 @@ void moverD(tCola &cola,tLista &lista){
 		
 	while(t!=NULL && cont<=lim){
 		t->desc = t->desc + 10;
-		if(t->desc >= t->peso){
-			insertarIC(lista,t);
-			eliminarP(cola,cont);
-		}
-		cont++;
+//		if(t->desc >= t->peso){
+//			insertarIC(lista,t);
+//			eliminarP(cola,cont);
+//		}
+//		cont++;
 		t=t->sgte;
+	}
+	t=cola;
+	bool flag=true;
+	while(flag){
+		t=cola;
+		cont=1;
+		flag=false;
+		while(t!=NULL){
+			if(t->desc >= t->peso){
+				insertarIC(lista,t);
+				eliminarP(cola,cont);
+				flag=true;
+				break;
+			}
+			cont++;
+			t=t->sgte;
+		}
 	}
 	
 }
@@ -288,6 +305,3 @@ int main(){
 	system("pause");
 	return 0;
 }
-
-
-
