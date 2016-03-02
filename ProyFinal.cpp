@@ -1,4 +1,8 @@
 #include <bits/stdc++.h>
+#include <conio.h>
+#include <windows.h>
+
+
 using namespace std;
 struct nodo{
 	int peso;		//total
@@ -17,9 +21,9 @@ typedef struct nodo2 *tLista;
 
 
 int lim=3;
-////tiempo
-//clock_t start;
-//int diff;
+//tiempo
+clock_t start;
+int diff=0;
 
 void mostrar(tCola cola,tLista lista){
 	tCola t=cola;
@@ -27,16 +31,22 @@ void mostrar(tCola cola,tLista lista){
 	string pr;
 	int i=1;
 	if(t != NULL){
+		cout<<"===============================================================================\n";
 		cout<<"COLA DE DESCARGAS";
-		cout<<"\n==========================================================================\n";	
-		cout<<setw(2)<<"N"<<setw(15)<<"NOMBRE"<<setw(12)<<"PESO"<<setw(15)<<"PRIORIDAD"<<setw(15)<<"DESCARGADO"<<setw(15)<<"ESTADO"<<endl;
+		cout<<"\n===============================================================================\n";	
+		cout<<setw(2)<<"N"<<setw(15)<<"NOMBRE"<<setw(9)<<"PESO"<<setw(14)<<"PRIORIDAD"<<setw(15)<<"DESCARGADO"<<setw(11)<<"ESTADO"<<endl;
 		while(t != NULL){
 			switch(t->prio){
 				case 1:pr="ALTA";break;
 				case 2:pr="MEDIA";break;
 				case 3:pr="BAJA";break;
 			}
-			cout<<setw(2)<<i<<setw(15)<<t->nomb<<setw(10)<<t->peso<<"MB"<<setw(15)<<pr<<setw(13)<<t->desc<<"MB"<<setw(14)<<((t->desc)*100/(t->peso))<<"%"<<endl;
+			cout<<setw(2)<<i<<setw(15)<<t->nomb<<setw(7)<<t->peso<<"MB"<<setw(14)<<pr<<setw(13)<<t->desc<<"MB"<<setw(10)<<((t->desc)*100/(t->peso))<<"%"<<"   ";
+			int temp=((t->desc)*100/(t->peso));
+			for(int j=0;j<temp/10;j++){
+				cout<<"\376";
+			}
+			cout<<endl;
 			t = t->sgte;
 			i++;
 		}
@@ -44,9 +54,9 @@ void mostrar(tCola cola,tLista lista){
 	i=1;
 	
 	if(t2 != NULL){
-		cout<<"\n==========================================================================\n";
+		cout<<"\n===============================================================================\n";
 		cout<<"DESCARGADOS";
-		cout<<"\n==========================================================================\n";
+		cout<<"\n===============================================================================\n";
 		cout<<setw(2)<<"N"<<setw(15)<<"NOMBRE"<<setw(12)<<"PESO"<<endl;
 		while(t2 != NULL){
 			cout<<setw(2)<<i<<setw(15)<<t2->nomb<<setw(10)<<t2->peso<<"MB"<<endl;
@@ -114,7 +124,7 @@ void insertarF(tCola &cola,tCola aux){
 		}
 		temp->sgte = nuevo;
 	}
-	cout<<"XXX";
+
 }
 
 void insertarP(tCola &cola,tCola aux,int pos){
@@ -165,6 +175,7 @@ void agregarC(tCola &cola){
 		temp->sgte = t;
 	}*/
 	insertarF(cola,t);
+	start = clock();
 }
 
 void prioridad(tCola &cola){
@@ -185,9 +196,11 @@ void prioridad(tCola &cola){
 			return;
 		}
 	}
-	cout<<"Ingrese nueva prioridad [1(Alta)-2(Media)-3(Baja)]: ";
 	int nPrio;
-	cin>>nPrio;
+	do{
+		cout<<"Ingrese nueva prioridad [1(Alta)-2(Media)-3(Baja)]: ";
+		cin>>nPrio;
+	}while(nPrio!= 1 && nPrio!=2 && nPrio!=3);
 	
 	tCola aux = new(struct nodo);
 	aux->nomb=t->nomb;
@@ -240,16 +253,11 @@ void limpiar(tCola &cola){
 void moverD(tCola &cola,tLista &lista){
 	tCola t=cola;
 	int cont=1;
-//	start = clock();
-//	diff = ( std::clock() - start );
-	int diff=1;
+	
+	
 		
 	while(t!=NULL && cont<=lim){
-		t->desc = t->desc + 10;
-//		if(t->desc >= t->peso){
-//			insertarIC(lista,t);
-//			eliminarP(cola,cont);
-//		}
+		t->desc = t->desc + diff/100;
 		cont++;
 		t=t->sgte;
 	}
@@ -269,7 +277,8 @@ void moverD(tCola &cola,tLista &lista){
 			cont++;
 			t=t->sgte;
 		}
-	}	
+	}
+	
 }
 
 void limite(){
@@ -279,27 +288,31 @@ void limite(){
 
 void menu(tCola &cola,tLista &lista){
 	int opc;
-	do{
+	do{		
 		system("cls");
 		moverD(cola,lista);
 		mostrar(cola,lista);
-		cout<<"\n==========================================================================\n";
+		
+		cout<<"\n===============================================================================\n";
 		cout<<"\nMENU";
 		cout<<"\n1.Agregar a la cola de descargas";
 		cout<<"\n2.Cancelar descarga";
 		cout<<"\n3.Limite de descargas simultaneas";
 		cout<<"\n4.Cambiar prioridad";
-		cout<<"\n5.Salir";
+		cout<<"\n5.Actualizar";
+		cout<<"\n6.Salir";
 		cout<<"\nOpcion->";
 		cin>>opc;
 		cout<<endl;
+		diff = ( clock() - start );
 		switch(opc){
-			case 1 : agregarC(cola);break;
+			case 1 : agregarC(cola);diff=0;break;
 			case 2 : cancelarD(cola);break;
 			case 3 : limite();break;
 			case 4 : prioridad(cola);break;
 		}
-	}while(opc!=5);
+		start = clock();
+	}while(opc!=6);
 }
 
 int main(){
