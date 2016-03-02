@@ -17,7 +17,7 @@ typedef struct nodo2 *tLista;
 
 
 int lim=3;
-//tiempo
+////tiempo
 //clock_t start;
 //int diff;
 
@@ -240,9 +240,8 @@ void limpiar(tCola &cola){
 void moverD(tCola &cola,tLista &lista){
 	tCola t=cola;
 	int cont=1;
-	
-	//start = clock();
-	//diff = ( std::clock() - start );
+//	start = clock();
+//	diff = ( std::clock() - start );
 	int diff=1;
 		
 	while(t!=NULL && cont<=lim){
@@ -251,10 +250,10 @@ void moverD(tCola &cola,tLista &lista){
 //			insertarIC(lista,t);
 //			eliminarP(cola,cont);
 //		}
-//		cont++;
+		cont++;
 		t=t->sgte;
 	}
-	t=cola;
+
 	bool flag=true;
 	while(flag){
 		t=cola;
@@ -270,8 +269,12 @@ void moverD(tCola &cola,tLista &lista){
 			cont++;
 			t=t->sgte;
 		}
-	}
-	
+	}	
+}
+
+void limite(){
+	cout<<"Ingrese límite de descargas simultaneas";
+	cin>>lim;
 }
 
 void menu(tCola &cola,tLista &lista){
@@ -280,19 +283,20 @@ void menu(tCola &cola,tLista &lista){
 		system("cls");
 		moverD(cola,lista);
 		mostrar(cola,lista);
-		cout<<"\n==========================================================================";
+		cout<<"\n==========================================================================\n";
 		cout<<"\nMENU";
 		cout<<"\n1.Agregar a la cola de descargas";
 		cout<<"\n2.Cancelar descarga";
-		cout<<"\n3.Limpiar descargados";
+		cout<<"\n3.Limite de descargas simultaneas";
 		cout<<"\n4.Cambiar prioridad";
 		cout<<"\n5.Salir";
 		cout<<"\nOpcion->";
 		cin>>opc;
+		cout<<endl;
 		switch(opc){
 			case 1 : agregarC(cola);break;
 			case 2 : cancelarD(cola);break;
-			/*case 3 : limpiar(cola);break;*/
+			case 3 : limite();break;
 			case 4 : prioridad(cola);break;
 		}
 	}while(opc!=5);
